@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Code Submission Result</title>
+    <script>
+        async function fetchResult(submissionId) {
+            const response = await fetch(`/result/${submissionId}`);
+            const data = await response.json();
+            document.getElementById("status").innerText = data.status;
+            document.getElementById("result").innerText = data.result;
+        }
+
+        function refreshResult() {
+            const submissionId = {{ submission_id }};
+            fetchResult(submissionId);
+        }
+
+        setInterval(refreshResult, 5000);  // 5초마다 결과를 새로고침
+    </script>
+</head>
+<body onload="refreshResult()">
+    <h1>Submission Result</h1>
+    <p><strong>Status:</strong> <span id="status">Loading...</span></p>
+    <p><strong>Output:</strong> <span id="result">Waiting for execution...</span></p>
+    <a href="/">Submit another code</a>
+</body>
+</html>
