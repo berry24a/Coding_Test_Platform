@@ -11,6 +11,7 @@ import asyncio
 DATABASE_URL = "mysql+mysqlconnector://ubuntu:ubuntu123@localhost/submission_db"  # 실제 서버에서는 변경된 db주소 입력
 database = databases.Database(DATABASE_URL)
 metadata = sqlalchemy.MetaData()
+answer = open('answer.txt', 'r').read()
 
 submissions = sqlalchemy.Table(
     "submissions",
@@ -67,7 +68,7 @@ async def execute_submission(submission: Submission):
 
     try:
         output = subprocess.check_output(["python3", code_path], stderr=subprocess.STDOUT, timeout=10)
-        status = "CORRECT" if output.strip() == b"expected_output" else "INCORRECT"
+        status = "CORRECT" if output.strip().decode('utf-8') == answer.strip() else "INCORRECT"
     except subprocess.TimeoutExpired:
         output = b"Execution timed out"
         status = "TIMEOUT"
